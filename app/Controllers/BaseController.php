@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\FieldModel;
+use App\Models\ForgotPasswordModel;
+use App\Models\OwnerRequestModel;
 use App\Models\UserModel;
 use App\Models\TeamModel;
 use App\Models\BookingModel;
@@ -58,6 +60,8 @@ class BaseController extends Controller
         $this->teamModel = new TeamModel();
         $this->detailBookingModel = new DetailBookingModel();
         $this->bookingModel = new BookingModel();
+        $this->forgotPasswordModel = new ForgotPasswordModel();
+        $this->ownerRequestModel = new OwnerRequestModel();
 
         $userId = $this->session->get('user_id');
         $this->user = $this->userModel->getUserById($userId);

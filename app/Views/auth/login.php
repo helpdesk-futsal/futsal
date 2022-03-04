@@ -13,6 +13,11 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">SIGN IN</h1>
                                 </div>
+                                <?php if (session()->getFlashdata('message')): ?>
+                                    <div class="alert alert-success" role="alert">
+                                        <?= session()->getFlashdata('message') ?>
+                                    </div>
+                                <?php endif; ?>
                                 <?php if (session()->getFlashdata('error')): ?>
                                     <div class="alert alert-danger" role="alert">
                                         <?= session()->getFlashdata('error') ?>

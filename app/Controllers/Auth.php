@@ -3,8 +3,9 @@
 namespace App\Controllers;
 
 class Auth extends BaseController{
-    public function index(){
-        return redirect()->to('/login');;
+
+    public function __construct(){
+        $this->email = \Config\Services::email();
     }
 
     public function login() {
@@ -31,9 +32,20 @@ class Auth extends BaseController{
         return view('auth/forgot-password', $data);
     }
 
-    public function resetPassword() {
+    public function resetPassword($link) {
+        $request = $this->forgotPasswordModel->getRequest($link);
+        if (!$request) {
+            session()->setFlashdata('error', 'Link is invalid');
+            return redirect()->to('/login');
+        }
+        if(!$request['is_valid']) {
+            session()->setFlashdata('error', 'Link is expired');
+            return redirect()->to('/login');
+        }
         $data = [
             "title" => 'Reset Password',
+            "isSidebarHidden" => true,
+            "request" => $request,
             "validation" => \Config\Services::validation()
         ];
         return view('auth/reset-password', $data);
@@ -65,8 +77,8 @@ class Auth extends BaseController{
             'name' => 'required',
             'email' => 'required|is_unique[user.email]',
             'phone_number' => 'required|is_unique[user.phone_number]',
-            'password' => 'required',
-            'password_confirmation' => 'required'
+            'password' => 'required|matches[password_confirmation]',
+            'password_confirmation' => 'required|matches[password]'
         ];
         if (!$this->validate($validator)) {
             return redirect()->to('/register')->withInput();
@@ -79,7 +91,7 @@ class Auth extends BaseController{
         ];
         $this->userModel->save($data);
         session()->setFlashdata('message', 'Successfully created a new user. Please login!');
-        return redirect()->to('/register');
+        return redirect()->to('/login');
     }
 
     public function attemptForgotPassword() {
@@ -89,21 +101,27 @@ class Auth extends BaseController{
         if (!$this->validate($validator)) {
             return redirect()->to('/forgot-password')->withInput();
         }
+
+        $email = $this->request->getVar('email');
+        $user = $this->userModel->getUserByEmail($email);
+        if (!$user) {
+            session()->setFlashdata('error', 'No registered user was found.');
+            return redirect()->to('/forgot-password')->withInput();
+        }
         $data = [
-            'email' => $this->request->getVar('email')
+            'user_id'=> $user['user_id'],
+            'link' => md5(date('l jS \of F Y h:i:s A').$user['user_id'] )
         ];
 
+        $this->forgotPasswordModel->save($data);
 
-        $email = \Config\Services::email();
-        $email->setFrom('helpdesk.futsal@gmail.com', 'Futsal Admin');
-        $email->setTo($data['email']);
-        $email->setSubject('Reset Password');
-        $email->setMessage('Testing the email class.');
+        $this->email->setFrom('helpdesk.futsal@gmail.com', 'Futsal Admin');
+        $this->email->setTo($email);
+        $this->email->setSubject('Reset Password');
+        $this->email->setMessage('Here is a link to reset your password '. base_url('/reset-password/'.$data['link']));
 
-        if (!$email->send()) {
-            session()->setFlashdata('message', 'Error');
-            echo 'err';
-            $email->printDebugger();
+        if (!$this->email->send()) {
+            session()->setFlashdata('message', 'Something went wrong. Please try again!');
 
         } else {
             session()->setFlashdata('message', 'Successfully. Please check your email!');
@@ -113,16 +131,19 @@ class Auth extends BaseController{
 
     public function attemptResetPassword() {
         $validator = [
-            'password' => 'required'
+            'password' => 'required|matches[password_confirmation]',
+            'password_confirmation' => 'required|matches[password]'
         ];
         if (!$this->validate($validator)) {
             return redirect()->to('/reset-password')->withInput();
         }
-
         $userId = $this->request->getVar('user_id');
+        $requestId = $this->request->getVar('request_id');
         $password = $this->request->getVar('password');
         $this->userModel->changePassword($userId, $password);
-        $this->redirect()->to('/login');
+        $this->forgotPasswordModel->expire($requestId);
+        session()->setFlashdata('message', 'Successfully changed your password');
+        return redirect()->to('/login');
     }
 
     public function logout() {
@@ -130,7 +151,4 @@ class Auth extends BaseController{
         return redirect()->to('/login');
     }
 
-    public function forgotPasswordMail() {
-
-    }
 }

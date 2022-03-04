@@ -12,3 +12,11 @@
         $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
         return $hasil_rupiah;
     }
+
+    function getCurrentDateTime() {
+        return date("Y-m-d H:i:s");
+    }
+
+    function getFormattedDate($originalDate) {
+        return date("D, d M Y", strtotime($originalDate));
+    }

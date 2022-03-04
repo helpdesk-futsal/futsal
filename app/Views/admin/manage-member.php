@@ -22,7 +22,7 @@
                     <td><?= strtolower($m['email']) ?></td>
                     <td><?= $m['phone_number'] ?></td>
                     <td><?= $m['team'] ? $m['team'] : '-';?></td>
-                    <td><?= $m['created_at'] ?></td>
+                    <td><?= getFormattedDate($m['created_at']) ?></td>
                     <td>
                         <a class="badge badge-danger container p-2"
                            href="<?= base_url('/set-as-admin/'.$m['user_id']) ?>">Set as Admin</a><br>

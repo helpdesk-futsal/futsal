@@ -19,7 +19,8 @@ class Profile extends BaseController{
         $data = [
             "title" => "Edit Profile",
             "isSidebarHidden" => false,
-            "user" => $this->user
+            "user" => $this->user,
+            "validation" => \Config\Services::validation()
         ];
         return view('profile/edit-profile', $data);
     }
@@ -37,9 +38,9 @@ class Profile extends BaseController{
     public function attemptEditProfile(){
         $validator = [
             'user_id' => 'required',
-            'email' => 'required',
+            'email' => 'required|is_unique[user.email, user_id, {user_id}]',
             'name' => "required",
-            'phone_number' => "required",
+            'phone_number' => 'required|is_unique[user.phone_number, user_id, {user_id}]',
             'image' => [
                 'rules' => 'max_size[image,10240]|is_image[image]
                 |mime_in[image,image/jpg,image/jpeg,image/png]'
@@ -52,9 +53,11 @@ class Profile extends BaseController{
             'name' => $this->request->getVar('name'),
             'phone_number' => $this->request->getVar('phone_number')
         ];
-
+        if (!$this->validate($validator)) {
+            return redirect()->to('/edit-profile')->withInput();
+        }
         $image = $this->request->getFile('image');
-        if ($image) {
+        if ($image->getSize()>0) {
             $image->move('assets/img/profile');
             $imageName = $image->getName();
             $data['image'] = $imageName;
@@ -64,7 +67,7 @@ class Profile extends BaseController{
         $this->user['email'] = $data['email'];
         $this->user['name'] = $data['name'];
         $this->user['phone_number'] = $data['phone_number'];
-        session()->setFlashdata('messsage', 'Successfuly changed profile!');
+        session()->setFlashdata('message', 'Successfuly changed profile!');
         return redirect()->to('/profile');
     }
 

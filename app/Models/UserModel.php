@@ -32,6 +32,11 @@ class UserModel extends Model
         return $this->db->query($query)->getRowArray();
     }
 
+    public function getUserByEmail($email) {
+        $query = "SELECT * FROM user WHERE email='$email'";
+        return $this->db->query($query)->getRowArray();
+    }
+
     public function getAllMember() {
         $query = "SELECT * FROM user LEFT JOIN team
                     ON user.team_id = team.team_id  WHERE role_id='1'";
@@ -68,5 +73,16 @@ class UserModel extends Model
     public function changePassword($userId, $password) {
         $query = "UPDATE user SET password ='$password' WHERE user_id='$userId'";
         return $this->db->query($query);
+    }
+
+    public function approveOwner($ownerRequestId) {
+        $query = "UPDATE owner_request SET status='1' WHERE owner_request_id = '$ownerRequestId'";
+        $this->db->query($query);
+        $query = "SELECT * FROM owner_request WHERE owner_request_id = '$ownerRequestId'";
+        $userId = $this->db->query($query)->getRowArray()['user_id'];
+        $query = "UPDATE user SET role_id='2' WHERE user_id='$userId'";
+        $this->db->query($query);
+        $fieldModel = new FieldModel();
+        $fieldModel->save(["owner_id"=>$userId]);
     }
 }

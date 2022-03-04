@@ -24,6 +24,7 @@
                 <td><?= ucfirst($b['email']) ?></td>
                 <td><?= ucfirst($b['phone_number']) ?></td>
                 <td><?= rupiah($b['total_price']) ?></td>
+                <td><?= getFormattedDate($b['created_at']) ?></td>
                 <td><?= ($b['is_confirmed']==1)? 'Confirmed' : 'Not confirmed'; ?></td>
                 <td><a href="<?= base_url('/detail-booking/'.$b['booking_id']); ?>">see detail</a></td>
             </tr>

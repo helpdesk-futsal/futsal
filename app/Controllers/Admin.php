@@ -46,6 +46,17 @@ class Admin extends BaseController{
         return view('admin/manage-owner', $data);
     }
 
+    public function ownerApproval(){
+        $owner = $this->ownerRequestModel->getAllOwnerRequest();
+        $data = [
+            "user" => $this->user,
+            "title" => "Owner Approval",
+            "isSidebarHidden" => false,
+            "owner"=> $owner
+        ];
+        return view('admin/owner-approval', $data);
+    }
+
     public function setAsMember($userId) {
         $this->userModel->setAsMember($userId);
         return redirect()->to('/manage-member');
@@ -60,5 +71,15 @@ class Admin extends BaseController{
     public function setAsAdmin($userId) {
         $this->userModel->setAsAdmin($userId);
         return redirect()->to('/manage-admin');
+    }
+
+    public function approveOwner($ownerRequestId) {
+        $this->userModel->approveOwner($ownerRequestId);
+        return redirect()->to('/owner-approval');
+    }
+
+    public function rejectOwner($userId) {
+        $this->userModel->setAsMember($userId);
+        return redirect()->to('/manage-member');
     }
 }

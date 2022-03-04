@@ -1,4 +1,4 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('layout/auth/template'); ?>
 <?= $this->section('content'); ?>
 <div class="container mt-3">
     <div class="row justify-content-center">
@@ -14,10 +14,21 @@
                                     <h1 class="h4 text-gray-900 mb-4">Enter new password</h1>
                                 </div>
                                 <form class="user" method="post" action="<?= base_url('/reset-password'); ?>">
-                                    <input type="text" id="user_id" name="user_id" value="<?= $user_id ?>" hidden>
+                                    <input type="text" id="user_id" name="user_id" value="<?= $request['user_id'] ?>" hidden>
+                                    <input type="text" id="request_id" name="request_id" value="<?= $request['request_id'] ?>" hidden>
                                     <div class="form-group">
                                         <input type="password" class="form-control form-control-user" id="password"
                                                name="password" placeholder="Password">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('password'); ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control form-control-user" id="password_confirmation"
+                                               name="password_confirmation" placeholder="Password Confirmation">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('password_confirmation'); ?>
+                                        </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Reset password

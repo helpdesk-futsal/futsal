@@ -15,11 +15,22 @@
         <?php foreach ($team as $t): ?>
         <tr>
                 <td style="width: 50px;"><?= $count++ ?></td>
-                <td><?= ucfirst($t['name']) ?></td>
+                <?php if($t['leader_id'] == $t['user_id']): ?>
+                <td>
+                    <strong><?= ucfirst($t['name']) ?> | Leader</strong>
+                    (<?= $t['phone_number'] ?>)
+                </td>
+                <?php else: ?>
+                    <td><?= ucfirst($t['name']) ?></td>
+                <?php endif; ?>
+
         </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
-    <a href="<?= base_url('/exit-team') ?>">Exit team</a>
+    <form action="/exit-team" method="post">
+        <input type="text" hidden name="team_id" value="<?= $team[0]['team_id']?>">
+        <button class="btn btn-danger">Exit team</button>
+    </form>
 </div>
 <?= $this->endSection(); ?>

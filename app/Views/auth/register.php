@@ -52,10 +52,10 @@
                                 <div class="col-sm-6">
                                     <input type="password" class="form-control form-control-user
                                     <?= ($validation->hasError('password_confirmation')) ? 'is-invalid' : ''; ?>"
-                                           id="password-confirmation" name="password-confirmation"
+                                           id="password-confirmation" name="password_confirmation"
                                            placeholder="Repeat Password" value="<?= old('password_confirmation'); ?>">
                                     <div class="invalid-feedback">
-                                        <?= $validation->getError('password-_confirmation'); ?>
+                                        <?= $validation->getError('password_confirmation'); ?>
                                     </div>
                                 </div>
                             </div>

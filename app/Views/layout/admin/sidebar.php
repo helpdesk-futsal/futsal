@@ -43,4 +43,13 @@
             <i class="fas fa-fw fa-user"></i>
             <span>Manage admin</span></a>
     </li>
+    <hr class="sidebar-divider mb-3">
+    <div class="sidebar-heading">
+        Owner
+    </div>
+    <li class="nav-item">
+        <a class="nav-link" href="<?= base_url('owner-approval') ?>">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Owner Approval</span></a>
+    </li>
 </ul>

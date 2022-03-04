@@ -49,7 +49,7 @@ class Member extends BaseController{
 
     public function team() {
         if ($this->user['team_id']) {
-            $team= $this->teamModel->getDetailTeam($this->user['team_id']);
+            $team= $this->teamModel->getDetailTeamMember($this->user['team_id']);
             $data = [
                 "user" => $this->user,
                 "isSidebarHidden" => false,
@@ -67,6 +67,36 @@ class Member extends BaseController{
             ];
             return view('member/find-team', $data);
         }
+    }
+
+    public function assignLeader() {
+        if ($this->user['team_id']) {
+            $team= $this->teamModel->getDetailTeamMemberWithoutLeader($this->user['team_id'], $this->user['user_id']);
+            $data = [
+                "user" => $this->user,
+                "isSidebarHidden" => false,
+                "title" => "Assign new leader",
+                "team"=> $team
+            ];
+            return view('member/assign-leader', $data);
+        }
+    }
+
+    public function attemptAssignLeader() {
+        $validator = [
+            'team_id' => 'required',
+            'leader_id' => 'required',
+        ];
+        if (!$this->validate($validator)) {
+            return redirect()->to('/assign-leader')->withInput();
+        }
+        $data = [
+            'team_id' => $this->request->getVar('team_id'),
+            'leader_id' => $this->request->getVar('leader_id')
+        ];
+        $this->teamModel->save($data);
+        $this->teamModel->exitTeam($this->user['user_id'], $this->user['team_id']);
+        return redirect()->to('/team');
     }
 
     public function history(){
@@ -114,6 +144,7 @@ class Member extends BaseController{
         }
         $data = [
             'team' => $this->request->getVar('team'),
+            'leader_id' => $this->user['user_id']
         ];
         $this->teamModel->save($data);
         $insertedTeam = $this->teamModel->getTeamFromName($data['team']);
@@ -127,8 +158,16 @@ class Member extends BaseController{
     }
 
     public function exitTeam() {
-        $this->teamModel->exitTeam($this->user['user_id'], $this->user['team_id']);
-        return redirect()->to('/team');
+        $userId = $this->user['user_id'];
+        $teamId = $this->request->getVar('team_id');
+        $team = $this->teamModel->getDetailTeam($teamId);
+        $teamMember = $this->teamModel->getDetailTeamMemberWithoutLeader($teamId, $userId);
+        if (count($teamMember)>0 && $team['leader_id'] == $this->user['user_id']) {
+            return redirect()->to('/assign-leader');
+        } else {
+            $this->teamModel->exitTeam($this->user['user_id'], $this->user['team_id']);
+            return redirect()->to('/team');
+        }
     }
 
     public function uploadReceipt() {
@@ -142,5 +181,32 @@ class Member extends BaseController{
             $data['receipt_image'] = $imageName;
         }
         $this->bookingModel->save($data);
+        return redirect()->to('/detail-booking/'.$data['booking_id']);
+    }
+
+    public function ownerRequest() {
+        $data = [
+            "user" => $this->user,
+            "isSidebarHidden" => false,
+            "title" => "Request to be an Owner",
+            "validation" => \Config\Services::validation()
+        ];
+        return view('member/owner-request', $data);
+    }
+
+    public function attemptOwnerRequest() {
+        $validator = [
+            'message' => 'required',
+        ];
+        if (!$this->validate($validator)) {
+            return redirect()->to('/owner-request')->withInput();
+        }
+        $data = [
+            'message' => $this->request->getVar('message'),
+            'user_id' => $this->user['user_id']
+        ];
+        $this->ownerRequestModel->save($data);
+        session()->setFlashdata('message', 'Successfuly sent request!');
+        return redirect()->to('/profile');
     }
 }

@@ -38,4 +38,9 @@
             <i class="fas fa-fw fa-lock"></i>
             <span>History</span></a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="<?= base_url('owner-request') ?>">
+            <i class="fas fa-fw fa-lock"></i>
+            <span>Be an Owner</span></a>
+    </li>
 </ul>

@@ -23,7 +23,7 @@
                     <td><?= strtolower($a['email']) ?></td>
                     <td><?= $a['phone_number'] ?></td>
                     <td><?= $a['team'] ? $a['team'] : '-';?></td>
-                    <td><?= $a['created_at'] ?></td>
+                    <td><?= getFormattedDate($a['created_at']) ?></td>
                     <td>
                         <a class="badge badge-danger container p-2"
                            href="<?= base_url('/set-as-member/'.$a['user_id']); ?>">Set as Member</a><br>

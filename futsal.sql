@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Feb 2022 pada 18.22
+-- Waktu pembuatan: 04 Mar 2022 pada 19.14
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.10
 
@@ -34,8 +34,8 @@ CREATE TABLE `booking` (
   `total_price` int(11) NOT NULL,
   `receipt_image` text DEFAULT NULL,
   `is_confirmed` int(11) NOT NULL,
-  `created_at` date NOT NULL,
-  `updated_at` date NOT NULL
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -43,10 +43,10 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`booking_id`, `user_id`, `field_id`, `total_price`, `receipt_image`, `is_confirmed`, `created_at`, `updated_at`) VALUES
-(6, 11, 1, 0, 'default.jpg', 0, '2022-02-24', '2022-02-24'),
-(7, 11, 5, 0, 'default.jpg', 0, '2022-02-24', '2022-02-24'),
-(8, 11, 5, 80000, 'default.jpg', 0, '2022-02-25', '2022-02-25'),
-(9, 11, 5, 80000, 'default.jpg', 0, '2022-02-25', '2022-02-25');
+(6, 11, 1, 0, 'default.jpg', 0, '2022-02-24 00:00:00', '2022-02-24 00:00:00'),
+(7, 11, 5, 0, 'MicrosoftTeams-ima2ge.png', 0, '2022-02-24 00:00:00', '2022-03-04 11:18:20'),
+(8, 11, 5, 80000, 'default.jpg', 0, '2022-02-25 00:00:00', '2022-02-25 00:00:00'),
+(9, 11, 5, 80000, 'default.jpg', 0, '2022-02-25 00:00:00', '2022-02-25 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -96,8 +96,8 @@ CREATE TABLE `field` (
   `number_of_fields` int(11) NOT NULL,
   `price` int(11) NOT NULL,
   `owner_id` int(11) NOT NULL,
-  `created_at` date NOT NULL,
-  `updated_at` date NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   `field_image` text NOT NULL DEFAULT 'default.jpg',
   `is_active` tinyint(1) NOT NULL DEFAULT 0,
   `bank_account` text NOT NULL
@@ -108,8 +108,9 @@ CREATE TABLE `field` (
 --
 
 INSERT INTO `field` (`field_id`, `field_name`, `address`, `subdistrict`, `district`, `city`, `province`, `number_of_fields`, `price`, `owner_id`, `created_at`, `updated_at`, `field_image`, `is_active`, `bank_account`) VALUES
-(1, 'Futsal baru', 'Jl. Pagedangan 1213312', '', '', '', '', 2, 0, 9, '2022-02-18', '2022-02-18', 'default.jpg', 1, 'BCA 10123 A.n Sunaryo'),
-(5, 'asd', 'A112', 'Pasir Ampo__3603140002', 'Kresek__3603140', 'Kabupaten Tangerang__3603', 'Banten__36', 1, 40000, 10, '2022-02-18', '2022-02-25', 'default.jpg', 1, 'BCA 10123 A.n Sunaryo');
+(1, 'Futsal baru', 'Jl. Pagedangan 1213312', '', '', '', '', 2, 0, 9, '2022-02-18 00:00:00', '2022-02-18 00:00:00', 'default.jpg', 1, 'BCA 10123 A.n Sunaryo'),
+(5, 'asd', 'A112', 'Pasir Ampo__3603140002', 'Kresek__3603140', 'Kabupaten Tangerang__3603', 'Banten__36', 1, 40000, 10, '2022-02-18 00:00:00', '2022-02-25 00:00:00', 'default.jpg', 1, 'BCA 10123 A.n Sunaryo'),
+(7, '', '', '', '', '', '', 0, 0, 16, '2022-03-04 12:13:18', '2022-03-04 12:13:18', 'default.jpg', 0, '');
 
 -- --------------------------------------------------------
 
@@ -120,9 +121,19 @@ INSERT INTO `field` (`field_id`, `field_name`, `address`, `subdistrict`, `distri
 CREATE TABLE `forgot_password` (
   `request_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `request_date` date NOT NULL,
-  `link` text NOT NULL
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
+  `link` text NOT NULL,
+  `is_valid` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `forgot_password`
+--
+
+INSERT INTO `forgot_password` (`request_id`, `user_id`, `updated_at`, `created_at`, `link`, `is_valid`) VALUES
+(1, 16, '2022-02-28 09:03:13', '2022-02-28 09:03:13', '9c13896831327b09a62c61b99f543adf', 1),
+(2, 16, '2022-02-28 09:05:03', '2022-02-28 09:05:03', 'ed65e4bfd5458689950a483e71545f1d', 1);
 
 -- --------------------------------------------------------
 
@@ -134,10 +145,17 @@ CREATE TABLE `owner_request` (
   `owner_request_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `message` text NOT NULL,
-  `is_approved` tinyint(1) NOT NULL DEFAULT 0,
+  `status` int(1) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `owner_request`
+--
+
+INSERT INTO `owner_request` (`owner_request_id`, `user_id`, `message`, `status`, `created_at`, `updated_at`) VALUES
+(1, 16, 'aasd', 1, '2022-03-04 12:02:21', '2022-03-04 12:02:21');
 
 -- --------------------------------------------------------
 
@@ -168,6 +186,7 @@ INSERT INTO `role` (`role_id`, `role`) VALUES
 CREATE TABLE `team` (
   `team_id` int(11) NOT NULL,
   `team` varchar(50) NOT NULL,
+  `leader_id` int(11) NOT NULL,
   `created_at` date NOT NULL,
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -176,8 +195,8 @@ CREATE TABLE `team` (
 -- Dumping data untuk tabel `team`
 --
 
-INSERT INTO `team` (`team_id`, `team`, `created_at`, `updated_at`) VALUES
-(9, 'asd', '2022-02-25', '2022-02-25');
+INSERT INTO `team` (`team_id`, `team`, `leader_id`, `created_at`, `updated_at`) VALUES
+(12, 'juragan', 16, '2022-03-03', '2022-03-04');
 
 -- --------------------------------------------------------
 
@@ -203,12 +222,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `password`, `name`, `phone_number`, `role_id`, `team_id`, `created_at`, `updated_at`, `image`) VALUES
-(8, 'a@g.com', 'hahaha1', 'Admin', '08123123', 3, NULL, '2022-02-17 09:57:55', '2022-02-25 10:21:04', 'default.jpg'),
-(9, 'o@g.com', 'hahaha1', 'owner', '08912', 2, NULL, '2022-02-18 05:39:12', '2022-02-18 05:39:12', 'default.jpg'),
-(10, 'm@g.com', 'hahaha1', 'Member', '081', 2, NULL, '2022-02-18 07:10:59', '2022-02-25 10:35:15', 'default.jpg'),
-(11, 'f@g.com', 'hahaha1', 'fadel', '0812131', 1, 9, '2022-02-18 08:55:09', '2022-02-18 08:55:09', 'default.jpg'),
-(12, 'f@g.com', '', 'FadelC', '0812131', 1, NULL, '2022-02-25 09:49:44', '2022-02-25 09:49:44', 'default.jpg'),
-(14, 'a@g.com', '', 'Admin', '08123123', 1, NULL, '2022-02-25 10:18:48', '2022-02-25 10:18:48', 'default.jpg');
+(8, 'a@g.com', 'hahaha', 'Admin', '08123123', 3, NULL, '2022-02-17 09:57:55', '2022-02-25 10:21:04', 'default.jpg'),
+(9, 'o@g.com', 'hahaha', 'owner', '08912', 2, NULL, '2022-02-18 05:39:12', '2022-02-18 05:39:12', 'default.jpg'),
+(10, 'm@g.com', 'hahaha', 'Member', '081', 2, NULL, '2022-02-18 07:10:59', '2022-02-25 10:35:15', 'default.jpg'),
+(11, 'f@g.com', 'hahaha', 'fadel', '0812', 1, NULL, '2022-02-18 08:55:09', '2022-03-04 11:17:13', 'default.jpg'),
+(16, 'erickgennady@gmail.com', 'hahaha', 'erick', '08991712772', 2, 12, '2022-02-28 08:21:22', '2022-03-04 11:47:03', 'default.jpg');
 
 --
 -- Indexes for dumped tables
@@ -282,19 +300,19 @@ ALTER TABLE `detail_booking`
 -- AUTO_INCREMENT untuk tabel `field`
 --
 ALTER TABLE `field`
-  MODIFY `field_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `field_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `forgot_password`
 --
 ALTER TABLE `forgot_password`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `owner_request`
 --
 ALTER TABLE `owner_request`
-  MODIFY `owner_request_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `owner_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `role`
@@ -306,13 +324,13 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT untuk tabel `team`
 --
 ALTER TABLE `team`
-  MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

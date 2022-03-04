@@ -13,7 +13,8 @@ class RouteFilter implements FilterInterface {
         $userId = $session->get('user_id');
 
         $currentRoute = uri_string();
-        if ($currentRoute == 'login' || $currentRoute == 'register' ||
+        $currentRoute = explode('/', $currentRoute)[0];
+        if ($currentRoute =='login'  || $currentRoute == 'register' ||
             $currentRoute == 'reset-password' || $currentRoute == 'forgot-password') {
             if ($userId) {
                 return redirect()->to('/profile');

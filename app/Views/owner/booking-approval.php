@@ -25,7 +25,7 @@
                     <td><?= ucfirst($b['name']) ?></td>
                     <td><?= ucfirst($b['email']) ?></td>
                     <td><?= ucfirst($b['phone_number']) ?></td>
-                    <td><?= $b['created_at'] ?></td>
+                    <td><?= getFormattedDate($b['created_at']) ?></td>
                     <td><?= ($b['is_confirmed']==1)? 'Confirmed' : 'Not confirmed'; ?></td>
                     <td>
                         <?php if($b['receipt_image']):?>

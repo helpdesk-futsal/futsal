@@ -10,7 +10,8 @@ class TeamModel extends Model
     protected $primaryKey     = 'team_id';
     protected $useSoftDeletes = false;
     protected $allowedFields  = [
-        'team'
+        'team',
+        'leader_id'
     ];
     protected $useTimestamps      = true;
     protected $validationRules    = [];
@@ -18,7 +19,32 @@ class TeamModel extends Model
     protected $skipValidation     = false;
 
     public function getDetailTeam($teamId){
-        $query = "SELECT * FROM team LEFT JOIN user ON team.team_id = user.team_id WHERE team.team_id='$teamId'";
+        $query = "SELECT * FROM team WHERE team.team_id='$teamId'";
+        return $this->db->query($query)->getRowArray();
+    }
+
+    public function getDetailTeamMember($teamId){
+        $query = "SELECT * FROM team LEFT JOIN user ON team.team_id = user.team_id WHERE team.team_id='$teamId'
+    ORDER BY case when user.user_id=leader_id then 0 else 1 end
+";
+        return $this->db->query($query)->getResultArray();
+    }
+
+    public function getTeamLeader($teamId){
+        $query = "SELECT user.* FROM team JOIN user
+            ON team.team_id = user.team_id 
+            AND team.leader_id = user.user_id
+WHERE team.team_id='$teamId'";
+        return $this->db->query($query)->getResultArray();
+    }
+
+
+    public function getDetailTeamMemberWithoutLeader($teamId, $userId){
+        $query = "SELECT * FROM team LEFT JOIN user 
+    ON team.team_id = user.team_id
+    WHERE team.team_id='$teamId'
+    AND user.user_id != '$userId'
+    ";
         return $this->db->query($query)->getResultArray();
     }
 
@@ -28,10 +54,9 @@ class TeamModel extends Model
     }
 
     public function getAllTeam(){
-        $query = "SELECT team.team_id, team, count(team) AS count 
-FROM user LEFT JOIN team ON team.team_id = user.user_id
-WHERE user.team_id != 'null'
-GROUP BY team";
+        $query = "SELECT team.team_id, team, count(team) AS count
+FROM user JOIN team ON team.team_id = user.team_id
+GROUP BY team_id";
         return $this->db->query($query)->getResultArray();
     }
 

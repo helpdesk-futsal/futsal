@@ -32,14 +32,14 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 
-// Profile
+// Auth
 $routes->get('/login', 'Auth::login');
 $routes->post('/login', 'Auth::attemptLogin');
 $routes->get('/register', 'Auth::register');
 $routes->post('/register', 'Auth::attemptRegister');
 $routes->get('/forgot-password', 'Auth::forgotPassword');
 $routes->post('/forgot-password', 'Auth::attemptForgotPassword');
-$routes->get('/reset-password', 'Auth::resetPassword');
+$routes->get('/reset-password/(:any)', 'Auth::resetPassword/$1');
 $routes->post('/reset-password', 'Auth::attemptResetPassword');
 $routes->get('/logout', 'Auth::logout');
 
@@ -55,6 +55,9 @@ $routes->get('/admin/dashboard', 'Admin::dashboard');
 $routes->get('/manage-member', 'Admin::manageMember');
 $routes->get('/manage-owner', 'Admin::manageOwner');
 $routes->get('/manage-admin', 'Admin::manageAdmin');
+$routes->get('/owner-approval', 'Admin::ownerApproval');
+$routes->get('/approve-owner/(:any)', 'Admin::approveOwner/$1');
+$routes->get('/reject-owner/(:any)', 'Admin::rejectOwner/$1');
 $routes->get('/set-as-member/(:any)', 'Admin::setAsMember/$1');
 $routes->get('/set-as-owner/(:any)', 'Admin::setAsOwner/$1');
 $routes->get('/set-as-admin/(:any)', 'Admin::setAsAdmin/$1');
@@ -73,12 +76,16 @@ $routes->get('/booking', 'Member::booking');
 $routes->get('/history', 'Member::history');
 $routes->get('/detail-booking/(:any)', 'Member::detailBooking/$1');
 $routes->post('/booking-confirmation', 'Member::bookingConfirmation');
+$routes->get('/owner-request', 'Member::ownerRequest');
+$routes->post('/owner-request', 'Member::attemptOwnerRequest');
 
 $routes->get('/team', 'Member::team');
 $routes->get('/create-team', 'Member::createTeam');
+$routes->get('/assign-leader', 'Member::assignLeader');
+$routes->post('/assign-leader', 'Member::attemptAssignLeader');
 $routes->post('/create-team', 'Member::attemptCreateTeam');
 $routes->get('/join-team/(:any)', 'Member::joinTeam/$1');
-$routes->get('/exit-team/', 'Member::exitTeam');
+$routes->post('/exit-team/', 'Member::exitTeam');
 $routes->post('/upload-receipt', 'Member::uploadReceipt');
 /*
  * --------------------------------------------------------------------
