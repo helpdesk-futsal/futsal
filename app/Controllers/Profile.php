@@ -37,10 +37,16 @@ class Profile extends BaseController{
 
     public function attemptEditProfile(){
         $validator = [
-            'user_id' => 'required',
+            'user_id' => [
+                'label' => 'user id',
+                'rules' => 'required'
+            ],
             'email' => 'required|is_unique[user.email, user_id, {user_id}]',
             'name' => "required",
-            'phone_number' => 'required|is_unique[user.phone_number, user_id, {user_id}]',
+            'phone_number' => [
+                'label' => 'phone number',
+                'rules' => 'required|is_unique[user.phone_number, user_id, {user_id}]'
+            ],
             'image' => [
                 'rules' => 'max_size[image,10240]|is_image[image]
                 |mime_in[image,image/jpg,image/jpeg,image/png]'
@@ -73,9 +79,18 @@ class Profile extends BaseController{
 
     public function attemptChangePassword(){
         $validator = [
-            'old_password' => 'required',
-            'password' => "required",
-            'password_confirmation' => "required"
+            'old_password' => [
+                'label' => 'old password',
+                'rules' => 'required'
+            ],
+            'password' => [
+                'label' => 'password',
+                'rules' => 'required|matches[password_confirmation]'
+            ],
+            'password_confirmation' => [
+                'label' => 'password confirmation',
+                'rules' => 'required|matches[password]'
+            ],
         ];
         if (!$this->validate($validator)) {
             return redirect()->to('/change-password')->withInput();

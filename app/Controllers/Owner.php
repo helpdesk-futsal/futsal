@@ -45,16 +45,29 @@ class Owner extends BaseController{
 
     public function attemptManageField(){
         $validator = [
-            'field_id'  => 'required',
-            'field_name' => 'required',
+            'field_id'  => [
+                'label' => 'field id',
+                'rules' => 'required'
+            ],
+            'field_name' => [
+                'label' => 'field name',
+                'rules' => 'required'
+            ],
             'province' => 'required',
             'city' => 'required',
             'district' => 'required',
-            'subdistrict' => 'required',
+            'subdistrict' => [
+                'label' => 'sub district',
+                'rules' => 'required'
+            ],
             'price' => 'required',
             'address' => 'required',
-            'number_of_fields' => 'required',
+            'number_of_fields' => [
+                'label' => 'number of fields',
+                'rules' => 'required'
+            ],
             'field_image' => [
+                'label' => 'field image',
                 'rules' => 'max_size[field_image,10240]|is_image[field_image]
                 |mime_in[field_image,image/jpg,image/jpeg,image/png]'
             ]

@@ -1,8 +1,5 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon">
-            <img src="<?= base_url('assets/img/logo.png') ?>" alt="" height="50px">
-        </div>
+    <a class="sidebar-brand" href="<?= base_url('profile') ?>">
         <div class="sidebar-brand-text mx-2">Futsal</div>
     </a>
     <hr class="sidebar-divider mb-3">
@@ -30,17 +27,17 @@
     </div>
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('team') ?>">
-            <i class="fas fa-fw fa-lock"></i>
+            <i class="fas fa-fw fa-child"></i>
             <span>Team</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('history') ?>">
-            <i class="fas fa-fw fa-lock"></i>
+            <i class="fas fa-fw fa-history"></i>
             <span>History</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('owner-request') ?>">
-            <i class="fas fa-fw fa-lock"></i>
+            <i class="fas fa-fw fa-briefcase"></i>
             <span>Be an Owner</span></a>
     </li>
 </ul>

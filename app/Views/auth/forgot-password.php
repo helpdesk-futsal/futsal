@@ -7,7 +7,7 @@
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block bg-login-image"
-                                 style="background: url('<?= base_url('assets/'); ?>img/registration.jpg');background-size:cover;background-position:center;"></div>
+                                 style="background: url('<?= base_url('assets/img/forgot-password.jpg'); ?>');background-size:cover;background-position:center;"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div>
@@ -21,7 +21,7 @@
                                     <form class="user" method="post"
                                           action="<?= base_url('forgot-password'); ?>">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user
+                                            <input type="email" class="form-control form-control-user
                                             <?= ($validation->hasError('email')) ? 'is-invalid' : ''; ?>"
                                                    id="email" name="email" placeholder="Email Address"
                                                    value="<?= old('email'); ?>">

@@ -75,10 +75,19 @@ class Auth extends BaseController{
     public function attemptRegister() {
         $validator = [
             'name' => 'required',
-            'email' => 'required|is_unique[user.email]',
-            'phone_number' => 'required|is_unique[user.phone_number]',
-            'password' => 'required|matches[password_confirmation]',
-            'password_confirmation' => 'required|matches[password]'
+            'email' => 'required|is_unique[user.email]|valid_email',
+            'phone_number' => [
+                'label' => 'phone number',
+                'rules' => 'required|is_unique[user.phaaone_number]',
+            ],
+            'password' => [
+                'label' => 'password',
+                'rules' => 'required|matches[password_confirmation]'
+            ],
+            'password_confirmation' => [
+                'label' => 'password confirmation',
+                'rules' => 'required|matches[password]'
+            ],
         ];
         if (!$this->validate($validator)) {
             return redirect()->to('/register')->withInput();
@@ -96,7 +105,7 @@ class Auth extends BaseController{
 
     public function attemptForgotPassword() {
         $validator = [
-            'email' => 'required'
+            'email' => 'required|valid_email'
         ];
         if (!$this->validate($validator)) {
             return redirect()->to('/forgot-password')->withInput();

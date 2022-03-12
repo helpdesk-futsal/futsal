@@ -5,7 +5,7 @@
         <div class="card-body p-0">
             <div class="row">
                 <div class="col-lg-5 d-none d-lg-block bg-register-image"
-                     style="background: url('<?= base_url('assets/'); ?>img/login.jpg');background-size:cover;background-position:center;"></div>
+                     style="background: url('<?= base_url('assets/img/register.jpg'); ?>');background-size:cover;background-position:center;"></div>
                 <div class="col-lg-7">
                     <div class="p-5">
                         <div class="text-center">
@@ -44,7 +44,7 @@
                                     <input type="password" class="form-control form-control-user
                                     <?= ($validation->hasError('password')) ? 'is-invalid' : ''; ?>"
                                            id="password" name="password"
-                                           placeholder="Password" value="<?= old('password'); ?>">
+                                           placeholder="Password">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('password'); ?>
                                     </div>
@@ -53,7 +53,7 @@
                                     <input type="password" class="form-control form-control-user
                                     <?= ($validation->hasError('password_confirmation')) ? 'is-invalid' : ''; ?>"
                                            id="password-confirmation" name="password_confirmation"
-                                           placeholder="Repeat Password" value="<?= old('password_confirmation'); ?>">
+                                           placeholder="Repeat Password">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('password_confirmation'); ?>
                                     </div>

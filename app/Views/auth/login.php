@@ -7,7 +7,7 @@
                 <div class="card-body p-0">
                     <div class="row">
                         <div class="col-lg-6 d-none d-lg-block bg-login-image"
-                             style="background: url('<?= base_url('assets/'); ?>img/registration.jpg');background-size:cover;background-position:center;"></div>
+                             style="background: url('<?= base_url('assets/img/login.jpg'); ?>');background-size:cover;background-position:center;"></div>
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">

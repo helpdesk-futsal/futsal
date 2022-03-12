@@ -84,8 +84,14 @@ class Member extends BaseController{
 
     public function attemptAssignLeader() {
         $validator = [
-            'team_id' => 'required',
-            'leader_id' => 'required',
+            'team_id' => [
+                'label' => 'team',
+                'rules' => 'required'
+            ],
+            'leader_id' => [
+                'label' => 'leader',
+                'rules' => 'required'
+            ],
         ];
         if (!$this->validate($validator)) {
             return redirect()->to('/assign-leader')->withInput();
