@@ -63,6 +63,9 @@
                         <input type="text" class="form-control" name="address"
                                id="address" value="<?= $field['address']; ?>" required>
                     </div>
+                    <?php if($field['field_image']!= 'default.jpg'): ?>
+                        <input type="text" name="has_image" value="true" hidden>
+                    <?php endif; ?>
                     <div class="form-group">
                         <label for="exampleFormControlFile1">Picture</label>
                         <input type="file" class="form-control-file" id="field_image" name="field_image">

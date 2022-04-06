@@ -12,3 +12,7 @@ a {
 ; /* blue colors for links too */
   text-decoration: none!important; /* no underline */
 }
+
+.remove-btn {
+  cursor: pointer;
+}

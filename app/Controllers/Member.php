@@ -215,4 +215,50 @@ class Member extends BaseController{
         session()->setFlashdata('message', 'Successfuly sent request!');
         return redirect()->to('/profile');
     }
+
+    public function filterField() {
+        $request = [
+            'keywords' => $this->request->getVar('keywords'),
+            'province' => $this->request->getVar('province'),
+            'city' => $this->request->getVar('city'),
+            'district' => $this->request->getVar('district'),
+            'subdistrict' => $this->request->getVar('subdistrict'),
+        ];
+        $data = $this->fieldModel->filterField($request);
+        $result = '';
+        foreach ($data as $d) {
+            $result = $result.
+'
+            <div class="col-lg-4 col-6">
+                <a href="'.base_url('field/'.$d['field_id']).'">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="'.base_url('/assets/img/field/'.$d['field_image']).'" alt="..." width="100%">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">'.$d['field_name'].'</h5>
+                                    <p class="card-text">
+                                        '.$d['address'].', '
+                                        .getAddress($d['subdistrict']).', '
+                                        .getAddress($d['district']).', '
+                                        .getAddress($d['city']).', '
+                                        .getAddress($d['province']).'
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+';
+        }
+        if ($result) {
+            return $result;
+        }
+        else {
+            return 'No field was found.';
+        }
+    }
 }

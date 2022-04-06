@@ -43,4 +43,32 @@ class FieldModel extends Model
                     WHERE field.field_id='$fieldId'";
         return $this->db->query($query)->getResultArray();
     }
+
+    public function filterField($request) {
+        $condition = '';
+        if ($request['province']) {
+            $condition = $condition. " AND province = '".$request['province']."' ";
+            if ($request['city']) {
+                $condition = $condition. " AND city ='".$request['city']."' ";
+                if ($request['district']) {
+                    $condition = $condition. " AND district ='".$request['district']."' ";
+                    if ($request['subdistrict']) {
+                        $condition = $condition. " AND subdistrict ='".$request['subdistrict']."' ";
+                    }
+                }
+            }
+        }
+
+        if ($request['keywords']) {
+            $condition = $condition. " AND (address LIKE '%"  .$request['keywords']."%' ";
+            $condition = $condition. " OR province LIKE '%"  .$request['keywords']."%' ";
+            $condition = $condition. " OR city LIKE '%"  .$request['keywords']."%' ";
+            $condition = $condition. " OR district LIKE '%"  .$request['keywords']."%' ";
+            $condition = $condition. " OR subdistrict LIKE '%"  .$request['keywords']."%' ";
+            $condition = $condition. " OR field_name LIKE '%"  .$request['keywords']."%' )";
+        }
+
+        $query = "SELECT * FROM field WHERE is_active = '1'". $condition . ';';
+        return $this->db->query($query)->getResultArray();
+    }
 }

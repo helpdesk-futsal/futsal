@@ -71,6 +71,7 @@ $routes->get('/approve/(:any)', 'Owner::approve/$1');
 
 // Member
 $routes->get('/find-field', 'Member::findField');
+$routes->post('/find-field/filter', 'Member::filterField');
 $routes->get('/field/(:any)', 'Member::detailField/$1');
 $routes->get('/booking', 'Member::booking');
 $routes->get('/history', 'Member::history');

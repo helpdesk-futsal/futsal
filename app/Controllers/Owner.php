@@ -44,6 +44,7 @@ class Owner extends BaseController{
     }
 
     public function attemptManageField(){
+        $image = $this->request->getFile('field_image');
         $validator = [
             'field_id'  => [
                 'label' => 'field id',
@@ -65,15 +66,25 @@ class Owner extends BaseController{
             'number_of_fields' => [
                 'label' => 'number of fields',
                 'rules' => 'required'
-            ],
-            'field_image' => [
-                'label' => 'field image',
-                'rules' => 'max_size[field_image,10240]|is_image[field_image]
-                |mime_in[field_image,image/jpg,image/jpeg,image/png]'
             ]
         ];
+        $hasImage = $this->request->getVar('has_image');
+        if ($hasImage) {
+            if ($image->getSize() > 0) {
+                $validator['field_image'] = [
+                    'label' => 'field image',
+                    'rules' => 'max_size[field_image,10240]|is_image[field_image]
+                |mime_in[field_image,image/jpg,image/jpeg,image/png]'
+                ];
+            }
+        } else {
+            $validator['field_image'] = [
+                'label' => 'field image',
+                'rules' => 'max_size[field_image,10240]|is_image[field_image]
+                |mime_in[field_image,image/jpg,image/jpeg,image/png]|uploaded[field_image]'
+            ];
+        }
         if (!$this->validate($validator)) {
-            session()->setFlashdata('message', 'Something when wrong');
             return redirect()->to('/manage-field')->withInput();
         }
         $data = [
@@ -88,9 +99,7 @@ class Owner extends BaseController{
             'number_of_fields' => $this->request->getVar('number_of_fields'),
             'is_active' => 1
         ];
-
-        $image = $this->request->getFile('field_image');
-        if ($image) {
+        if ($image->getSize() > 0) {
             $image->move('assets/img/field');
             $imageName = $image->getName();
             $data['field_image'] = $imageName;
