@@ -131,7 +131,7 @@ class Auth extends BaseController{
 
         if (!$this->email->send()) {
             session()->setFlashdata('message', 'Something went wrong. Please try again!');
-
+            return redirect()->to('/login');
         } else {
             session()->setFlashdata('message', 'Successfully. Please check your email!');
             return redirect()->to('/login');
